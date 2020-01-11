@@ -32,21 +32,41 @@ class Algorithm:
          return bit_rate, target_buffer'''
 
          # If you choose BBA
+
+         # 阈值
          RESEVOIR = 0.5
          CUSHION =  1.5
+         DELAY = 2
+
+         # 参数设置
+         # S_buffer_size : 当前时刻缓冲区大小
+         # S_end_dalay : 端到端延迟
+
+         # S_cdn_flag S_buffer_flag 效果不明显
+
          
-         if S_buffer_size[-1] < RESEVOIR:
-             bit_rate = 0    
-         elif S_buffer_size[-1] >= RESEVOIR + CUSHION and S_buffer_size[-1] < CUSHION +CUSHION:
+
+         if S_buffer_size[-1] < RESEVOIR or S_end_delay[-1] > DELAY or S_buffer_flag[-1] == True or S_rebuf[-1] > 0:
+             bit_rate = 0
+             target_buffer = 1
+         elif (S_buffer_size[-1] >= RESEVOIR + CUSHION and S_buffer_size[-1] < CUSHION + CUSHION) :
              bit_rate = 2
+             target_buffer = 0
          elif S_buffer_size[-1] >= CUSHION + CUSHION:
              bit_rate = 3
+             target_buffer = 0  
          else:
              bit_rate = 1
+             target_buffer = 0
 
-         target_buffer = 0
+         
          latency_limit = 4
 
+         
+        
+            
+
+         
 
 
          return bit_rate, target_buffer, latency_limit
